@@ -1,1 +1,97 @@
 @import "tailwindcss";
+
+@layer base {
+  button:not(:disabled),
+  input[type="button"]:not(:disabled),
+  input[type="submit"]:not(:disabled),
+  input[type="reset"]:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [role="option"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  input[type="button"]:disabled,
+  input[type="submit"]:disabled,
+  input[type="reset"]:disabled,
+  [role="button"][aria-disabled="true"],
+  [role="option"][aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  /* Default to h-12, never smaller than h-9 — override per element with a height utility. */
+  button,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="number"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  select {
+    height: 3rem;
+    min-height: 2.25rem;
+  }
+}
+
+@theme {
+  --font-sans: "Karla", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+
+  /* Brand — amethyst-700 is the base brand shade; use it by default for primary fills
+     (buttons, active accents) unless a state (hover, focus, tint) calls for a different step. */
+  --color-amethyst-50: #faf7fd;
+  --color-amethyst-100: #f4ecfb;
+  --color-amethyst-200: #ebddf7;
+  --color-amethyst-300: #dcc2f0;
+  --color-amethyst-400: #c69be5;
+  --color-amethyst-500: #af75d7;
+  --color-amethyst-600: #9f5fc9;
+  --color-amethyst-700: #8444ac;
+  --color-amethyst-800: #6f3b8e;
+  --color-amethyst-900: #5b3172;
+  --color-amethyst-950: #3d1952;
+
+  /* Accent */
+  --color-marigold-50: #faf8ec;
+  --color-marigold-100: #f4efcd;
+  --color-marigold-200: #ebde9d;
+  --color-marigold-300: #dfc565;
+  --color-marigold-400: #d5ae3a;
+  --color-marigold-500: #b98f2a;
+  --color-marigold-600: #aa7824;
+  --color-marigold-700: #885820;
+  --color-marigold-800: #724821;
+  --color-marigold-900: #623d21;
+  --color-marigold-950: #381f10;
+
+  /* Text */
+  --color-woodsmoke-50: #fafafa;
+  --color-woodsmoke-100: #f5f5f5;
+  --color-woodsmoke-200: #e6e6e6;
+  --color-woodsmoke-300: #d6d6d6;
+  --color-woodsmoke-400: #a5a5a5;
+  --color-woodsmoke-500: #767676;
+  --color-woodsmoke-600: #575757;
+  --color-woodsmoke-700: #434343;
+  --color-woodsmoke-800: #292929;
+  --color-woodsmoke-900: #191919;
+  --color-woodsmoke-950: #0a0a0a;
+
+  /* Muted backgrounds */
+  --color-edward-50: #f9fafa;
+  --color-edward-100: #f4f5f5;
+  --color-edward-200: #e4e7e4;
+  --color-edward-300: #d0d7d1;
+  --color-edward-400: #a9b4aa;
+  --color-edward-500: #6a7a6c;
+  --color-edward-600: #4d5850;
+  --color-edward-700: #3b453d;
+  --color-edward-800: #242a23;
+  --color-edward-900: #161d17;
+  --color-edward-950: #090c09;
+}

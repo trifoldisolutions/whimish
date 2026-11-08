@@ -2,9 +2,24 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Start Dev Environment",
+      "label": "TW (watch)",
       "type": "shell",
-      "command": "npm run dev:all",
+      "command": "npm run tw",
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    },
+    {
+      "label": "Server (nodemon)",
+      "type": "shell",
+      "command": "npm run dev",
       "isBackground": true,
       "problemMatcher": [],
       "presentation": {

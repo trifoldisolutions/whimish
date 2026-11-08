@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/output.css">
+  <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  <script src="/submit-guard.js" defer></script>
+</head>
+<body class="min-h-screen bg-slate-900 text-white flex">
+  <%- include('../partials/admin-sidebar', { role, roleLabel, displayName, email, basePath, activeNav }) %>
+
+  <main class="flex-1 px-8 py-10">
+    <div class="bg-woodsmoke-900/60 border border-woodsmoke-800 rounded-md overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-woodsmoke-800 text-left text-xs text-woodsmoke-500">
+            <th class="px-5 py-3 font-medium">Name</th>
+            <th class="px-5 py-3 font-medium">Email</th>
+            <th class="px-5 py-3 font-medium">Role</th>
+            <th class="px-5 py-3 font-medium">Joined</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% admins.forEach(admin => { %>
+            <tr class="border-b border-woodsmoke-800 last:border-b-0">
+              <td class="px-5 py-3"><%= admin.displayName || '—' %></td>
+              <td class="px-5 py-3 text-woodsmoke-300"><%= admin.email %></td>
+              <td class="px-5 py-3">
+                <span class="text-xs font-medium px-2 py-1 rounded-full bg-amethyst-700/20 text-amethyst-300"><%= formatRole(admin.role) %></span>
+              </td>
+              <td class="px-5 py-3 text-woodsmoke-500"><%= admin.createdAt.toLocaleDateString() %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% if (admins.length === 0) { %>
+        <p class="text-sm text-woodsmoke-400 px-5 py-4">No admin accounts found.</p>
+      <% } %>
+    </div>
+  </main>
+</body>
+</html>

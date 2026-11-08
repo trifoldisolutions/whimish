@@ -1,7 +1,7 @@
 ' start-project.vbs
 ' Opens this project folder in VS Code.
-' Auto-running "npm run tw" and "npm run dev" (via "npm run dev:all") happens
-' through .vscode/tasks.json ("runOn": "folderOpen"), not from this script.
+' Auto-running "npm run tw" and "npm run dev" (each in its own terminal tab)
+' happens through .vscode/tasks.json ("runOn": "folderOpen"), not from this script.
 
 Option Explicit
 
