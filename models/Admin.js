@@ -6,8 +6,7 @@ const adminSchema = new mongoose.Schema(
     passwordHash: { type: String, required: true },
     displayName: { type: String, trim: true, default: '' },
     // Hierarchy, highest to lowest: founder > superadmin > content_moderator / support_admin
-    // (the latter two are peers, not ranked against each other). Dev Resources roles
-    // (supervisor/leader/associate) live in their own collection — see models/Dev.js.
+    // (the latter two are peers, not ranked against each other).
     role: {
       type: String,
       enum: ['content_moderator', 'support_admin', 'superadmin', 'founder'],

@@ -9,14 +9,13 @@ const path = require('path');
 const publicRouter = require('./routes/public');
 const appRouter = require('./routes/app');
 const adminRouter = require('./routes/admin');
-const tasksRouter = require('./routes/tasks');
-const { ADMIN_BASE, DEV_TASKS_BASE } = require('./config/routes');
+const { ADMIN_BASE } = require('./config/routes');
 
 const app = express();
 const PORT = process.env.PORT || 3008;
 
 app.set('view engine', 'ejs');
-app.set('views', [path.join(__dirname, 'views'), path.join(__dirname, 'dev_resources')]);
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
@@ -31,13 +30,12 @@ app.use(
 );
 
 // Three public-facing facades: general public site, the app itself, and the admin panel.
-// Admin and Dev Resources are mounted at deliberately unguessable paths (config/routes.js) rather
-// than their obvious names — see dev_resources/journal.md.
+// Admin is mounted at a deliberately unguessable path (config/routes.js) rather than its obvious
+// name — see dev_resources/journal.md.
 const facades = [
   { name: 'Public', mount: '/', router: publicRouter },
   { name: 'App', mount: '/app', router: appRouter },
   { name: 'Admin', mount: ADMIN_BASE, router: adminRouter },
-  { name: 'Dev Resources — Tasks', mount: DEV_TASKS_BASE, router: tasksRouter },
 ];
 
 facades.forEach(({ mount, router }) => app.use(mount, router));

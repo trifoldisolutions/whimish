@@ -3,9 +3,6 @@ const ROLE_LABELS = {
   superadmin: 'Superadmin',
   content_moderator: 'Content moderator',
   support_admin: 'Support admin',
-  supervisor: 'Supervisor',
-  leader: 'Leader',
-  associate: 'Associate',
 };
 
 function formatRole(role) {

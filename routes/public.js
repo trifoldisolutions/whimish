@@ -1,5 +1,5 @@
 const express = require('express');
-const pageTitle = require('../utils/pageTitle');
+const pageTitle = require('../services/pageTitle');
 
 const router = express.Router();
 

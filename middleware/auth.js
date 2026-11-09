@@ -4,7 +4,7 @@ function requireUser(req, res, next) {
 }
 
 // Redirects to `<mount>/login` rather than a hardcoded path so this works for any router that
-// applies it — each facade (Admin, Dev Resources) defines its own /login under its own mount.
+// applies it — each facade defines its own /login under its own mount.
 function requireAdmin(...allowedRoles) {
   return (req, res, next) => {
     if (!req.session.adminId) return res.redirect(`${req.baseUrl}/login`);

@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
-const pageTitle = require('../utils/pageTitle');
+const pageTitle = require('../services/pageTitle');
 
 const router = express.Router();
 
@@ -10,13 +10,13 @@ router.get('/', (req, res) => {
 });
 
 router.get('/login', (req, res) => {
-  res.render('app/login-signup', { title: pageTitle('Login', 'App'), error: null });
+  res.render('app/auth/login-signup', { title: pageTitle('Login', 'App'), error: null });
 });
 
 router.post('/signup', async (req, res) => {
   const { email, password, displayName } = req.body;
   if (!email || !password) {
-    return res.render('app/login-signup', {
+    return res.render('app/auth/login-signup', {
       title: pageTitle('Login', 'App'),
       error: 'Email and password are required.',
     });
@@ -24,7 +24,7 @@ router.post('/signup', async (req, res) => {
 
   const existing = await User.findOne({ email: email.trim().toLowerCase() });
   if (existing) {
-    return res.render('app/login-signup', {
+    return res.render('app/auth/login-signup', {
       title: pageTitle('Login', 'App'),
       error: 'An account with that email already exists.',
     });
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
   const valid = user && (await bcrypt.compare(password || '', user.passwordHash));
 
   if (!valid) {
-    return res.render('app/login-signup', {
+    return res.render('app/auth/login-signup', {
       title: pageTitle('Login', 'App'),
       error: 'Invalid email or password.',
     });

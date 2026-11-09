@@ -31,7 +31,7 @@ whimish/
 ├── routes/
 │   ├── public.js        Public pages, mounted at /
 │   ├── app.js           The app and its sign-in pages, mounted at /app
-│   ├── admin.js         Admin section, mounted at /admin
+│   ├── admin.js         Admin section, mounted at the path in config/routes.js
 │   ├── api.js           JSON API, mounted at /api (add when needed)
 │   └── webhooks.js      Calls from outside services, mounted at /api/webhooks, before api.js (add when needed)
 ├── middleware/          Express middleware: sign-in, rate limits, security headers, request logging
@@ -44,7 +44,7 @@ whimish/
 ├── src/input.css        Tailwind source, the only CSS file to edit
 ├── public/
 │   ├── output.css       Built by Tailwind: never edit or commit it
-│   ├── js/              Browser scripts. password-toggle.js, submit-guard.js and custom-select.js stay directly in public/
+│   ├── js/              Browser scripts
 │   └── img/             Images the site shows
 ├── scripts/             Scripts run by hand, each with its own npm script
 ├── test/                Tests, as name.test.js, run with `node --test`
@@ -52,7 +52,7 @@ whimish/
 ```
 
 - **Routes:** Add each route to its section's file, with a line in that file's `router.routes` list (`{ method, path, label }`). No routes in `server.js`, and no new route file per feature. Logic that several routes share, or that calls an outside service, goes in `services/`.
-- **Folder names:** No new `utils/`, `lib/` or `helpers/`. The files in `utils/` stay where they are (Rule 4 below uses `utils/pageTitle.js`), but new helpers go in `services/`, or in `middleware/` if they handle a request.
+- **Folder names:** No `utils/`, `lib/` or `helpers/`. Helpers go in `services/`, or in `middleware/` if they handle a request.
 - **Views:** Every page goes in its section's folder, never directly in `views/`. The folder already says the section, so name files for what they show: `views/admin/users.ejs`, not `views/admin-users.ejs`.
 - **Local-only files:** Notes, screenshots, logs, prompts, one-off scripts and source images go in `dev_resources/`, not the project root.
 - **Instruction files:** `AGENTS.md` is the only one. No `CLAUDE.md` or `.claude/` folder.
@@ -94,16 +94,16 @@ when it helps convey the disabled state visually — apply that case-by-case, no
 
 ### Rule 4: Page titles
 
-Every page title follows `Whimish [Facade] - [PageType]`, built via `utils/pageTitle.js`:
+Every page title follows `Whimish [Facade] - [PageType]`, built via `services/pageTitle.js`:
 
 ```js
-const pageTitle = require('../utils/pageTitle');
-pageTitle('Home');          // "Whimish - Home"        (Public facade — no facade name)
-pageTitle('Login', 'App');  // "Whimish App - Login"
-pageTitle('Tasks', 'Dev');  // "Whimish Dev - Tasks"
+const pageTitle = require('../services/pageTitle');
+pageTitle('Home');            // "Whimish - Home"         (Public facade — no facade name)
+pageTitle('Login', 'App');    // "Whimish App - Login"
+pageTitle('Users', 'Admin');  // "Whimish Admin - Users"
 ```
 
-Facade names match the short form used elsewhere (`App`, `Admin`, `Dev`), not the full facade
+Facade names match the short form used elsewhere (`App`, `Admin`), not the full facade
 label from `server.js`. The Public facade takes no facade name — just `Whimish - [PageType]`.
 Always use `pageTitle(...)` in route handlers rather than hardcoding a title string.
 
@@ -136,8 +136,8 @@ Every `<input type="password">`, without exception, gets a show/hide toggle butt
 
 - Wrap the input in a `relative` container, give the input `pr-10` so text doesn't run under the
   button, and point `data-password-toggle` at the input's `id`.
-- The toggle behavior is centralized in `public/password-toggle.js` (event-delegated, no per-page
-  JS needed) — load it once via `<script src="/password-toggle.js" defer></script>` in `<head>`.
+- The toggle behavior is centralized in `public/js/password-toggle.js` (event-delegated, no per-page
+  JS needed) — load it once via `<script src="/js/password-toggle.js" defer></script>` in `<head>`.
   It flips the input's `type` between `password`/`text` and swaps the icon between `tabler:eye`
   and `tabler:eye-off`.
 - The toggle `<button>` is a small icon button, not a full-size control — override the Rule 5
@@ -166,7 +166,7 @@ validity (`form.checkValidity()` — respects `required`, `type="email"`, `patte
 
 - Add the `disabled` attribute directly on the button, plus a `disabled:opacity-50` class so the
   disabled state is visible (cursor already goes `not-allowed` automatically via Rule 3).
-- Load `<script src="/submit-guard.js" defer></script>` once in `<head>` on any page with a form —
+- Load `<script src="/js/submit-guard.js" defer></script>` once in `<head>` on any page with a form —
   it wires every `form` on the page automatically (checks on load, re-checks on `input`/`change`),
   no per-form JS needed.
 - Forms with no required fields (e.g. a bare logout button) end up enabled immediately, which is
@@ -194,7 +194,7 @@ equivalent instead. This does **not** apply to plain text-entry inputs (`text`, 
 `password`, `number`, `textarea`) — those have no native chrome to replace, they're just styled
 directly like everything else.
 
-The only control type in use so far is the dropdown, via a shared `data-custom-select` pattern —
+The only control type built so far is the dropdown, via a shared `data-custom-select` pattern —
 same "centralized script, no per-page JS" approach as Rule 6/9. Markup:
 
 ```html
@@ -220,18 +220,18 @@ same "centralized script, no per-page JS" approach as Rule 6/9. Markup:
 
 - The hidden `input[data-custom-select-input]` is what actually gets submitted with the form —
   give it the real `name`, and `required` if the field is required. Everything else is display.
-- Load `<script src="/custom-select.js" defer></script>` once in `<head>` — it wires every
+- Load `<script src="/js/custom-select.js" defer></script>` once in `<head>` — it wires every
   `[data-custom-select]` on the page automatically (click/keyboard open+close, arrow-key/Home/End
   navigation between options, Enter/Space to choose, Escape and outside-click to dismiss, closes
   siblings when one opens). No per-page JS needed.
 - Server-render the initial state so the control is correct before JS runs: the selected `<li>`
   gets `aria-selected="true"`, the hidden input's `value` and the trigger's
   `[data-custom-select-label]` text must already match it. If nothing should be pre-selected
-  (forcing a real choice, e.g. picking a team leader), leave no option `aria-selected="true"`,
+  (forcing a real choice), leave no option `aria-selected="true"`,
   set the hidden input's `value` to `""`, and give the label placeholder styling
   (`text-woodsmoke-600`) with the placeholder text — same spirit as Rule 9: the submit button
   stays disabled (via `checkValidity()`) until a real value is chosen.
-- A disabled option (e.g. a leader already at their team cap) gets `aria-disabled="true"` plus
+- A disabled option gets `aria-disabled="true"` plus
   `opacity-50 pointer-events-none` on the `<li>` — the script skips it in keyboard navigation and
   click selection, matching a disabled `<option>`.
 - The trigger is a real `<button>`, so Rule 3 (cursor) and Rule 5 (height/radius) already apply to
